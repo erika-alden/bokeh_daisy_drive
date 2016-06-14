@@ -50,11 +50,12 @@ svg.append("g")
 svg.append("g")
     .attr("class", "y axis")
     .call(yAxis)
-  .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("x", -height / 2)
-    .attr("dy", "-2em")
-    .text("Count");
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("x", -height / 2)
+      .attr("dy", "-2em")
+      .text("Count");
+
 
 // Update the time displayed (XX:XX) next to the time slider
 function update_slider(time) {
@@ -83,9 +84,15 @@ function type(d) {
 
 function make_graph() {
   update_slider(+document.getElementById("time").value);
-  url = update_url()
+  url = update_url();
+
+  d3.select("body").append("p").text(url);
+
+  //alert(url);
   d3.csv(url, type, function(error, data) {
+      // sets the y max
     y.domain([0, d3.max(data, function(d) { return d.count; })]);
+
 
     svg.selectAll("g.y.axis")
       .call(yAxis);
@@ -93,26 +100,30 @@ function make_graph() {
     var bars = svg.selectAll(".bar")
       .data(data, function(d) { return d.etd; });
 
-    bars.transition(1000)
-      .attr("y", function(d) { return  y(d.count); } )
+//    bars.transition(1000)
+      bars.attr("y", function(d) { return  y(d.count); } )
       .attr("height", function(d) { return height - y(d.count); } );
 
     bars.enter().append("rect")
-      .attr("class", "bar")
+      .attr("class", "bar")    
+    //bars.enter().append("path")
+    //  .attr("class", "line")
+    //  .attr("d", line)
       .attr("x", function(d) { return x(d.etd); })
       .attr("width", x(1 - 2 * binMargin))
       .attr("y", height)
       .attr("height", 0)
-      .transition(1000)
+//      .transition(1000)
         .attr("y", function(d) { return y(d.count); })
         .attr("height", function(d) { return height - y(d.count); });
 
     bars.exit()
-      .transition(1000)
-        .attr("y", height)
-        .attr("height", 0)
+//      .transition(1000)
+//        .attr("y", height)
+//       .attr("height", 0)
       .remove();
-  });
+    }
+
 }
 
 make_graph();

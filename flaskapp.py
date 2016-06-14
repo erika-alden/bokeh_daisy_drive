@@ -1,4 +1,4 @@
-from flask import Flask, request, g
+from flask import Flask, request, g, render_template
 app = Flask(__name__)
 
 from collections import Counter
@@ -6,7 +6,25 @@ import csv
 import sqlite3
 import logging
 import time
+import json
 
+from bokeh.embed import components
+from bokeh.plotting import figure
+from bokeh.resources import INLINE
+from bokeh.util.string import encode_utf8
+
+colors = {
+    'Black': '#000000',
+    'Red':   '#FF0000',
+    'Green': '#00FF00',
+    'Blue':  '#0000FF',
+}
+
+def getitem(obj, item, default):
+    if item not in obj:
+        return default
+    else:
+        return obj[item]
 
 DATABASE = '/var/www/html/flaskapp/bart.db'
 
@@ -33,13 +51,64 @@ def execute_query(query, args=()):
     cur.close()
     return rows
 
-#@app.route('/')
-@app.route("/")
+@app.route('/')
+def polynomial():
+    """ Very simple embedding of a polynomial chart
+    """
+    return_str = 'here1'
+
+    # ?color=Black&_from=5&to=10
+    color = 'Black'
+    _from = 5
+    to = 10
+
+    try:
+        # Grab the inputs arguments from the URL
+        # This is automated by the button
+        args = request.args
+
+        return_str = return_str + " " + str(args)
+
+        # Get all the form arguments in the url with defaults
+        color = colors[getitem(args, 'color', 'Black')]
+        _from = int(getitem(args, '_from', 0))
+        to = int(getitem(args, 'to', 10))
+        return_str = return_str + ' in try '
+
+    except Exception as e:
+        return_str = return_str+ " Hello exception " + e.__doc__ + e.message
+        return return_str
+
+    x = list(range(_from, to + 1))
+    fig = figure(title="Polynomial")
+    fig.line(x, [i ** 2 for i in x], color=color, line_width=2)
+
+
+    # Configure resources to include BokehJS inline in the document.
+    # For more details see:
+    #   http://bokeh.pydata.org/en/latest/docs/reference/resources_embedding.html#bokeh-embed
+    js_resources = INLINE.render_js()
+    css_resources = INLINE.render_css()
+
+    # For more details see:
+    #   http://bokeh.pydata.org/en/latest/docs/user_guide/embedding.html#components
+    script, div = components(fig, INLINE)
+    html = render_template(
+        'embed.html',
+        plot_script=script,
+        plot_div=div,
+        js_resources=js_resources,
+        css_resources=css_resources,
+        color=color,
+        _from=_from,
+        to=to
+    )
+    return encode_utf8(html)
+
 def print_data():
     """Respond to a query of the format:
     myapp/?dest=Fremont&time=600&station=plza&day=0
     with ETD data for the time and location specified in the query"""
-    #print "Hello world"
     start_time = time.time()
     cur = get_db().cursor()
     try:
@@ -64,6 +133,9 @@ def print_data():
     logging.info("executed query in %s" % query_time)
     cur.close()
     header = 'etd,count\n'
+
+    dummy_data = "1,2,3,4,5,6,8"
+    return dummy_data
     return header + '\n'.join(str_rows)
 
 @app.route('/countme/<input_str>')

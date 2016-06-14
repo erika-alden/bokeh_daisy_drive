@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+
 <head>
   <link rel="stylesheet" type="text/css" href="graph.css">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.1.6.min.js"></script>
 </head>
+
 <body>
-<p>
+
+
   <label for="station_select"
           style="display: inline-block; width: 140px; text-align: right">
     Station =
@@ -46,5 +51,79 @@
 <p>
     Click slider and use arrow keys to adjust time.
 </p>
-<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<script src="graph.js"></script>
+
+
+
+<script datasci_update_url>
+// The base endpoint to receive data from. See update_url()                     
+var URL_BASE = "http://daisydrives.media.mit.edu/";
+
+// Update graph in response to inputs                                           
+d3.select("#dest").on("input", make_graph);
+d3.select("#day_select").on("input", make_graph);
+d3.select("#station_select").on("input", make_graph);
+d3.select("#time").on("input", make_graph);
+
+// Update the time displayed (XX:XX) next to the time slider                    
+function update_slider(time) {
+  var dateObj = new Date();
+  dateObj.setHours(Math.floor(time/60));
+  dateObj.setMinutes(time % 60);
+  d3.select("#prettyTime")
+    .text(dateObj.toTimeString().substring(0, 5));
+}
+// Return url to recieve csv data with query filled in from input fields        
+function update_url() {
+  return URL_BASE +
+        "?dest=" + document.getElementById("dest").value +
+        "&time=" + document.getElementById("time").value +
+        "&station=" + document.getElementById("station_select").value +
+        "&day=" + document.getElementById("day_select").value;
+}
+
+// Convert csv data to number types
+function type(d) {
+  d3.select("body").append("p").text("type function executing");
+  d3.select("body").append("p").text(d);
+  d.etd = +d.etd;
+  d.count = +d.count;
+  d3.select("body").append("p").text(d.etd);
+  d3.select("body").append("p").text(d.count);
+  return d;
+}
+
+var svg = dimple.newSvg("body", 800, 600);
+var data = [
+      { "Word":"Hello", "Awesomeness":2000 },
+      { "Word":"World", "Awesomeness":3000 }
+    ];
+
+function make_graph() {
+  update_slider(+document.getElementById("time").value);
+  url = update_url();
+  d3.select("body").append("p").text(url);
+  d3.csv(url, function(data){
+    d3.select("body").append("p").text("hi im inside csv");
+     d3.select("body").append("p").text(data);
+  });
+//  data = type(url);
+//  d3.select("body").append("p").text(data.count);
+//  d3.select("body").append("p").text(data.etd);
+//  d3.csv(url, type, function(error, data) {
+//    d3.select("body").append("p").text(data);
+//      d3.select("body").append("p").text(function(d) { return d.count; });
+//  });
+  svg.selectAll("*").remove();
+  var chart = new dimple.chart(svg, data);
+  chart.addCategoryAxis("x", "Word");
+  chart.addMeasureAxis("y", "Awesomeness");
+  chart.addSeries(null, dimple.plot.line);
+
+  chart.draw();
+  svg.append("text").attr("x", (svg[0][0].clientWidth / 2)).attr("y", 14).attr("text-anchor", "middle").style("font-size", "13px").style("font-weight", "bold").text(url);  
+}
+
+make_graph();
+</script>
+
+</body>
