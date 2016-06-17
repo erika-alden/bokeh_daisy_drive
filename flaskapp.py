@@ -7,6 +7,8 @@ import sqlite3
 import logging
 import time
 import json
+import os
+import pickle 
 
 from bokeh.embed import components
 from bokeh.plotting import figure
@@ -74,15 +76,36 @@ def polynomial():
         _from = int(getitem(args, '_from', 0))
         to = int(getitem(args, 'to', 10))
         return_str = return_str + ' in try '
+        
+        c = 1#3
+        p = 8#12
+        r = 0
+        d = 300#51
+
+        filename = '/home/erikad/flaskapp/pickle/'+str(c)+'_'+str(p)+'_'+str(r)+'_'+str(d)+'.pickle'
+        return_str = return_str + filename
+        if (os.path.isfile(filename)):
+            with open(filename, 'rb') as handle:
+                ans2 = pickle.load(handle)
+                for k in ans2.keys():
+                    print k
+                    return_str = return_str + 'len ' + str(k) + " " + str(len(ans2[k]))
+                x = ans2['t']
+                y = ans2['y0']
+
+                fig = figure(title="Polynomial2")
+                fig.line(x, y, color=color, line_width=2)
+        else:
+            return_str = return_str + ' file not found '
 
     except Exception as e:
         return_str = return_str+ " Hello exception " + e.__doc__ + e.message
         return return_str
 
-    x = list(range(_from, to + 1))
-    fig = figure(title="Polynomial")
-    fig.line(x, [i ** 2 for i in x], color=color, line_width=2)
-
+    #x = list(range(_from, to + 1))
+    fig = figure(title="Polynomial2")
+    #fig.line(x, [i ** 2 for i in x], color=color, line_width=2)
+    fig.line(x, y, color=color, line_width=2)
 
     # Configure resources to include BokehJS inline in the document.
     # For more details see:
