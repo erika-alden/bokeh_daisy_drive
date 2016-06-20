@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
+
     <meta charset='utf-8' />
     <meta http-equiv='content-type' content='text/html; charset=utf-8' />
 
@@ -41,5 +42,16 @@
         <button type="submit">Submit</button>
     </form>
     {{ plot_div|indent(4)|safe }}
+
+    <p>
+  <label for="time"
+         style="display: inline-block; align: left; width: 140px; text-align: r\
+ight">
+         Time = <span id="prettyTime">...</span>
+       </label>
+  <input type="range" id="time" min="240" max="1440" style="width:600px" value=\
+"460">
+</p>
+
   </body>
 </html>
