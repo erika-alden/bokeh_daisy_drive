@@ -149,6 +149,13 @@ def polynomial():
     # For more details see:
     #   http://bokeh.pydata.org/en/latest/docs/user_guide/embedding.html#components
     script, div = components(fig, INLINE)
+
+    #return_str = return_str + '<br>' + str(repeated_seeding)
+    #return return_str
+    r = 'no'
+    if repeated_seeding > 0:
+        r = 'yes'
+
     html = render_template(
         'embed.html',
         plot_script=script,
@@ -158,6 +165,7 @@ def polynomial():
         chain_length = chain_length,
         payload_cost = float(payload_cost)/100.0,
         repeated_seeding = repeated_seeding,
+        r_val = r,
         drive_init= float(drive_init)/1000.0
     )
     return encode_utf8(html)

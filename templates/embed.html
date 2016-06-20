@@ -17,28 +17,34 @@
   <body>
     <!-- A simple form for changing the graph -->
     <p> Select your settings: </p>
-    <form name="color_button" method='GET', class = "contact_form">
+    <form method='GET'>
 
 	Chain Length
-	<input type="text" name="chain_length" value="{{ chain_length }}">
-        <br>
+	<!-- <input type="text" name="chain_length" value="{{ chain_length }}">--> 
+	<input type="range" name="chain_length" min="1" max="7" value="{{chain_length}}" oninput="this.form.amountInput.value=this.value" />
+	<input type="number" name="amountInput" min="1" max="7" value="{{chain_length}}" oninput="this.form.chain_length.value=this.value" />
+        <p>
 
 	Cost of payload
-	<input type="text" name="payload_cost" value="{{ payload_cost }}">
-        <br>
+	<!--<input type="text" name="payload_cost" value="{{ payload_cost }}">-->
+	<input type="range" name="payload_cost" min="0.02" max="0.38" step="0.03" value="{{payload_cost}}" oninput="this.form.amountInput_p.value=this.value" />
+        <input type="number" name="amountInput_p" min="0.02" max="0.38" step="0.03" value="{{payload_cost}}" oninput="this.form.payload_cost.value=this.value" />
+        <p>
 
 	Repeated seeding
         <select name="repeated_seeding">
             <option value="yes">Repeat seeding</option>
             <option value="no" selected>Single seeding</option>
         </select>
-	<br>
+	<p>
 
 	Drive initialization
-	<input type="text" name="drive_init" value="{{ drive_init }}">
-        <br>
+	<!--<input type="text" name="drive_init" value="{{ drive_init }}">-->
+	<input type="range" name="drive_init" min="0.1" max="1" step="0.1" value="{{drive_init}}" oninput="this.form.amountInput_d.value=this.value">
+        <input type="number" name="amountInput_d" min="0.1" max="1" step="0.1" value="{{drive_init}}" oninput="this.form.drive_init.value=this.value">
+        <p>
 
-        <button type="submit">Submit</button>
+        <button type="submit">Plot</button>
     </form>
     {{ plot_div|indent(4)|safe }}
 
