@@ -70,26 +70,38 @@ def polynomial():
         return_str = return_str + " " + str(args)
 
         # Get all the form arguments in the url with defaults
-        chain_length = int(getitem(args, 'chain_length', 2))
-        payload_cost = int(getitem(args, 'payload_cost', 35))
-        repeated_seeding = on_off[getitem(args, 'repeated_seeding', 'no')]
-        drive_init = int(getitem(args, 'drive_init', 300))
-
-        # fix bad inputs
-        avail_c = np.arange(1,7,1)     #3
-        avail_p =  np.arange(2,41,3)   #12
-        avail_r =  np.array([0,1])    #0
-        avail_d =  np.append(np.array([1]), np.arange(100,1001,100))   #51
+        try:
+            chain_length = int(getitem(args, 'chain_length', 2))
+        except:
+            # "must be an integer" error message?
+            chain_length = 2
 
         try:
-            chain_length = find_nearest(avail_c, chain_length)
-            payload_cost = find_nearest(avail_p, payload_cost)
-            repeated_seeding = find_nearest(avail_r, repeated_seeding)
-            drive_init = find_nearest(avail_d, drive_init)
-        except Exception as e:
-            return_str = return_str+ "<br>Exception " + e.__doc__ + e.message
-            return return_str
+            payload_cost = float(getitem(args, 'payload_cost', 0.35))*100
+        except:
+            payload_cost = 35
 
+        try:
+            repeated_seeding = on_off[getitem(args, 'repeated_seeding', 'no')]
+        except:
+            repeated_seeding = 0
+
+        try:
+            drive_init = float(getitem(args, 'drive_init', .3))*1000
+        except:
+            drive_init = 300
+
+        # fix bad inputs
+        avail_c = np.arange(1,7,1)
+        avail_p =  np.arange(2,41,3)
+        avail_r =  np.array([0,1])
+        avail_d =  np.append(np.array([1]), np.arange(100,1001,100))
+
+        chain_length = find_nearest(avail_c, chain_length)
+        payload_cost = find_nearest(avail_p, payload_cost)
+        repeated_seeding = find_nearest(avail_r, repeated_seeding)
+        drive_init = find_nearest(avail_d, drive_init)
+        
         filename = '/home/erikad/flaskapp/pickle/'+str(chain_length)+'_'+str(payload_cost)+'_'+str(repeated_seeding)+'_'+str(drive_init)+'.pickle'
         return_str = return_str + filename
 
@@ -144,9 +156,9 @@ def polynomial():
         js_resources=js_resources,
         css_resources=css_resources,
         chain_length = chain_length,
-        payload_cost = payload_cost,
+        payload_cost = float(payload_cost)/100.0,
         repeated_seeding = repeated_seeding,
-        drive_init= drive_init
+        drive_init= float(drive_init)/1000.0
     )
     return encode_utf8(html)
 
