@@ -71,10 +71,10 @@ def polynomial():
 
         # Get all the form arguments in the url with defaults
         try:
-            chain_length = int(getitem(args, 'chain_length', 2))
+            chain_length = int(getitem(args, 'chain_length', 5))
         except:
             # "must be an integer" error message?
-            chain_length = 2
+            chain_length = 5
 
         try:
             payload_cost = float(getitem(args, 'payload_cost', 0.35))*100
@@ -87,9 +87,9 @@ def polynomial():
             repeated_seeding = 0
 
         try:
-            drive_init = float(getitem(args, 'drive_init', .3))*1000
+            drive_init = float(getitem(args, 'drive_init', .1))*1000
         except:
-            drive_init = 300
+            drive_init = 100
 
         # fix bad inputs
         avail_c = np.arange(1,7,1)
