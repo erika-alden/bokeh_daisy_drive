@@ -4,7 +4,7 @@
     <meta charset='utf-8' />
     <meta http-equiv='content-type' content='text/html; charset=utf-8' />
 
-    <title>Embed Demo</title>
+    <title>Daisy drive visualization</title>
 
     {{ js_resources|indent(4)|safe }}
 
@@ -16,30 +16,30 @@
   <body>
     <!-- A simple form for changing the graph -->
     <p> Select your settings: </p>
-    <form name="color_button" method='GET'>
+    <form name="color_button" method='GET', class = "contact_form">
+
 	Chain Length
-	<input type="text" name="chain_length" value="{{ to }}">
+	<input type="text" name="chain_length" value="{{ chain_length }}">
         <br>
 
 	Cost of payload
-	<input type="text" name="payload_cost" value="{{ to }}">
+	<input type="text" name="payload_cost" value="{{ payload_cost }}">
         <br>
-	
+
 	Repeated seeding
         <select name="repeated_seeding">
-            <option value="yes">Repeated seeding</option>
+            <option value="yes">Repeat seeding</option>
             <option value="no">Single seeding</option>
-            <option selected="selected" value="yes">Repeated seeding</option>
+	    <option selected = "{{ repeated_seeding }}"></option>
         </select>
 	<br>
 
-	Drive initialization: organisms released per 1000 wild organmisms
-	<input type="text" name="drive_init" value="{{ to }}">
+	Drive initialization: organisms released per 1000 wild organisms
+	<input type="text" name="drive_init" value="{{ drive_init }}">
         <br>
 
         <button type="submit">Submit</button>
     </form>
     {{ plot_div|indent(4)|safe }}
-    <p> Demonstrates some very simple embedding into a webpage</p>
   </body>
 </html>

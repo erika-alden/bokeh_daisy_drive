@@ -75,15 +75,10 @@ def execute_query(query, args=()):
 
 @app.route('/')
 def polynomial():
-    """ Very simple embedding of a polynomial chart
     """
-    return_str = 'here1'
-
-    chain_length = 3
-    payload_cost = 4
-    repeated_seeding = 5
-    drive_init = 6
-
+    Embeded daisy drive visualizer.
+    """
+    return_str = ''
     try:
         # Grab the inputs arguments from the URL
         # This is automated by the button
@@ -92,17 +87,12 @@ def polynomial():
         return_str = return_str + " " + str(args)
 
         # Get all the form arguments in the url with defaults
-        chain_length = int(getitem(args, 'chain_length', 1))
-        payload_cost = int(getitem(args, 'payload_cost', 8))
-        repeated_seeding = on_off[getitem(args, 'repeated_seeding', 'yes')]
+        chain_length = int(getitem(args, 'chain_length', 2))
+        payload_cost = int(getitem(args, 'payload_cost', 35))
+        repeated_seeding = on_off[getitem(args, 'repeated_seeding', 'no')]
         drive_init = int(getitem(args, 'drive_init', 300))
 
-        c = chain_length #2 #3
-        p = payload_cost #8#12
-        r = repeated_seeding #0
-        d = drive_init #300 #51
-
-        filename = '/home/erikad/flaskapp/pickle/'+str(c)+'_'+str(p)+'_'+str(r)+'_'+str(d)+'.pickle'
+        filename = '/home/erikad/flaskapp/pickle/'+str(chain_length)+'_'+str(payload_cost)+'_'+str(repeated_seeding)+'_'+str(drive_init)+'.pickle'
         return_str = return_str + filename
 
         if (os.path.isfile(filename)):
@@ -137,13 +127,8 @@ def polynomial():
             return_str = return_str + ' file not found '
 
     except Exception as e:
-        return_str = return_str+ " Hello exception " + e.__doc__ + e.message
+        return_str = return_str+ "<br>Exception " + e.__doc__ + e.message
         return return_str
-
-    #x = list(range(_from, to + 1))
-    #fig = figure(title="Polynomial2")
-    #fig.line(x, [i ** 2 for i in x], color=color, line_width=2)
-    #fig.line(x, y, color='#000000', line_width=2)
 
     # Configure resources to include BokehJS inline in the document.
     # For more details see:
