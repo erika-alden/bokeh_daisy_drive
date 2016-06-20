@@ -17,20 +17,26 @@
     <!-- A simple form for changing the graph -->
     <p> Select your settings: </p>
     <form name="color_button" method='GET'>
-        Color:
-        <select name="color">
-            <option value="Red">Red</option>
-            <option value="Green">Green</option>
-            <option value="Blue">Blue</option>
-            <option selected="selected" value="Black">Black</option>
+	Chain Length
+	<input type="text" name="chain_length" value="{{ to }}">
+        <br>
+
+	Cost of payload
+	<input type="text" name="payload_cost" value="{{ to }}">
+        <br>
+	
+	Repeated seeding
+        <select name="repeated_seeding">
+            <option value="yes">Repeated seeding</option>
+            <option value="no">Single seeding</option>
+            <option selected="selected" value="yes">Repeated seeding</option>
         </select>
+	<br>
+
+	Drive initialization: organisms released per 1000 wild organmisms
+	<input type="text" name="drive_init" value="{{ to }}">
         <br>
-        From:
-        <input type="text" name="_from" value="{{ _from }}">
-        <br>
-        To:
-        <input type="text" name="to" value="{{ to }}">
-        <br>
+
         <button type="submit">Submit</button>
     </form>
     {{ plot_div|indent(4)|safe }}

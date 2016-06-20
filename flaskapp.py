@@ -15,11 +15,31 @@ from bokeh.plotting import figure
 from bokeh.resources import INLINE
 from bokeh.util.string import encode_utf8
 
-colors = {
-    'Black': '#000000',
-    'Red':   '#FF0000',
-    'Green': '#00FF00',
-    'Blue':  '#0000FF',
+hex_color = {
+    'y0':'#2c6c87',
+    'y1':'#417a93',
+    'y2':'#56899f',
+    'y3':'#6b98ab',
+    'y4':'#80a6b7',
+    'y5':'#95b5c3',
+    'y6':'#aac4cf',
+    'y7':'#bfd2db',
+}
+
+on_off = {
+    'yes': 1,
+    'no':0,
+}
+
+alphas = {
+    'y0':1,
+    'y1':0.9,
+    'y2':0.8,
+    'y3':0.7,
+    'y4':0.6,
+    'y5':0.5,
+    'y6':0.4,
+    'y7':0.3,
 }
 
 def getitem(obj, item, default):
@@ -59,10 +79,10 @@ def polynomial():
     """
     return_str = 'here1'
 
-    # ?color=Black&_from=5&to=10
-    color = 'Black'
-    _from = 5
-    to = 10
+    chain_length = 3
+    payload_cost = 4
+    repeated_seeding = 5
+    drive_init = 6
 
     try:
         # Grab the inputs arguments from the URL
@@ -72,29 +92,47 @@ def polynomial():
         return_str = return_str + " " + str(args)
 
         # Get all the form arguments in the url with defaults
-        color = colors[getitem(args, 'color', 'Black')]
-        _from = int(getitem(args, '_from', 0))
-        to = int(getitem(args, 'to', 10))
-        return_str = return_str + ' in try '
-        
-        c = 1#3
-        p = 8#12
-        r = 0
-        d = 300#51
+        chain_length = int(getitem(args, 'chain_length', 1))
+        payload_cost = int(getitem(args, 'payload_cost', 8))
+        repeated_seeding = on_off[getitem(args, 'repeated_seeding', 'yes')]
+        drive_init = int(getitem(args, 'drive_init', 300))
+
+        c = chain_length #2 #3
+        p = payload_cost #8#12
+        r = repeated_seeding #0
+        d = drive_init #300 #51
 
         filename = '/home/erikad/flaskapp/pickle/'+str(c)+'_'+str(p)+'_'+str(r)+'_'+str(d)+'.pickle'
         return_str = return_str + filename
+
         if (os.path.isfile(filename)):
             with open(filename, 'rb') as handle:
                 ans2 = pickle.load(handle)
                 for k in ans2.keys():
                     print k
-                    return_str = return_str + 'len ' + str(k) + " " + str(len(ans2[k]))
-                x = ans2['t']
-                y = ans2['y0']
+                    return_str = return_str + '<br>Length of ' + str(k) + " is " + str(len(ans2[k]))+'.<br>'
+                #fig = figure(title="Polynomial2")
+                fig = figure()
 
-                fig = figure(title="Polynomial2")
-                fig.line(x, y, color=color, line_width=2)
+                # assemble x and y for plotting multiple lines
+                x = []
+                y = []
+                color = []
+                alpha_vals = []
+
+                for k in [i for i in ans2.keys() if i != 't']:
+                    if len(ans2[k]) > 0:
+                        x.append(ans2['t'])
+                        y.append(list(ans2[k]))
+                        color.append(hex_color[k])
+                        alpha_vals.append(alphas[k])
+
+                return_str = return_str +'<br>'+ ' x len '+str(len(x)) + ' '
+                return_str = return_str +'<br>'+ ' y len ' +str(len(y)) + ' '
+
+                # draw all of the lines
+                fig.multi_line(xs = x, ys = y, color = color, line_width = 3, line_alpha = alpha_vals)
+
         else:
             return_str = return_str + ' file not found '
 
@@ -103,9 +141,9 @@ def polynomial():
         return return_str
 
     #x = list(range(_from, to + 1))
-    fig = figure(title="Polynomial2")
+    #fig = figure(title="Polynomial2")
     #fig.line(x, [i ** 2 for i in x], color=color, line_width=2)
-    fig.line(x, y, color=color, line_width=2)
+    #fig.line(x, y, color='#000000', line_width=2)
 
     # Configure resources to include BokehJS inline in the document.
     # For more details see:
@@ -122,9 +160,10 @@ def polynomial():
         plot_div=div,
         js_resources=js_resources,
         css_resources=css_resources,
-        color=color,
-        _from=_from,
-        to=to
+        chain_length = chain_length,
+        payload_cost = payload_cost,
+        repeated_seeding = repeated_seeding,
+        drive_init= drive_init
     )
     return encode_utf8(html)
 
