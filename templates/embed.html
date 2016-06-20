@@ -30,8 +30,7 @@
 	Repeated seeding
         <select name="repeated_seeding">
             <option value="yes">Repeat seeding</option>
-            <option value="no">Single seeding</option>
-	    <option selected = "{{ repeated_seeding }}"></option>
+            <option value="no" selected>Single seeding</option>
         </select>
 	<br>
 
@@ -42,16 +41,6 @@
         <button type="submit">Submit</button>
     </form>
     {{ plot_div|indent(4)|safe }}
-
-    <p>
-  <label for="time"
-         style="display: inline-block; align: left; width: 140px; text-align: r\
-ight">
-         Time = <span id="prettyTime">...</span>
-       </label>
-  <input type="range" id="time" min="240" max="1440" style="width:600px" value=\
-"460">
-</p>
 
   </body>
 </html>
