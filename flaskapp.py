@@ -130,7 +130,7 @@ def polynomial():
 
                 # draw all of the lines
                 fig = figure()
-                fig.multi_line(xs = x, ys = y, color = color, line_width = 3, line_alpha = alpha_vals)
+                fig.multi_line(xs = x, ys = y, color = color, line_width = 4, line_alpha = alpha_vals)
                 fig.xaxis.axis_label = "Time (generations)"
                 fig.yaxis.axis_label = "Allele frequency"
 

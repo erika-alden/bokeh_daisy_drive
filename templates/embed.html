@@ -5,6 +5,11 @@
     <meta charset='utf-8' />
     <meta http-equiv='content-type' content='text/html; charset=utf-8' />
     <link rel="stylesheet" type="text/css" href="./static/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="./static/normalize.css" media="screen">
+
+<!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Daisy drive visualization</title>
 
@@ -23,7 +28,7 @@
     <form method='GET'>
 
 <div class = "row">
-<div class = "four columns">
+<div class = "one-third column category">
 	<h2>Chain Length</h2>
 	Number of drive elements. 
 	<!-- <input type="text" name="chain_length" value="{{ chain_length }}">--> 
@@ -53,7 +58,7 @@
         <button type="submit">Plot</button>
     </form>
 </div>
-<div class = "eight columns">
+<div class = "two-thirds column category">
     {{ plot_div|indent(4)|safe }}
 </div>
 </div>
