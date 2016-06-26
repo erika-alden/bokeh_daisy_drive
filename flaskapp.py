@@ -95,7 +95,7 @@ def polynomial():
         avail_c = np.arange(1,7,1)
         avail_p =  np.arange(2,41,3)
         avail_r =  np.array([0,1])
-        avail_d =  np.append(np.array([1]), np.arange(100,1001,100))
+        avail_d =  np.append(np.array([1]), np.arange(100,1001,50))
 
         chain_length = find_nearest(avail_c, chain_length)
         payload_cost = find_nearest(avail_p, payload_cost)
