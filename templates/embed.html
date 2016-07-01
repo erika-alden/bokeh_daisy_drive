@@ -4,8 +4,12 @@
 
     <meta charset='utf-8' />
     <meta http-equiv='content-type' content='text/html; charset=utf-8' />
-    <link rel="stylesheet" type="text/css" href="./static/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="./static/normalize.css" media="screen">
+    <!--<link rel="stylesheet" type="text/css" href="./static/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="./static/normalize.css" media="screen">-->
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
 <!-- Mobile Specific Metas
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -19,12 +23,19 @@
 
     {{ plot_script|indent(4)|safe }}
 
+  <script>
+    function outputUpdate(){
+        var values = [0.001, 0.1, 50,5000];
+        var slider_value = document.getElementsByName("chain_length")[0].value;
+        document.getElementsByName("Textbox")[0].value = values[slider_value];
+    }
+   </script>
+
   </head>
-  <body>
+  <body onload="outputUpdate()">
 <div class="container">
     <!-- A simple form for changing the graph -->
     <h1>Daisy Drive Grapher</h1>
-    <p> Use the following sliders to manipulate the daisy drive parametes. Then press graph for a plot of the expected frequencey of drive elements over time. </p>
     <form method='GET'>
 
 <div class = "row">
@@ -32,8 +43,9 @@
 	<h2>Chain Length</h2>
 	Number of drive elements. 
 	<!-- <input type="text" name="chain_length" value="{{ chain_length }}">--> 
-	<input type="range" class="slider-width200"  name="chain_length" min="1" max="7" value="{{chain_length}}" oninput="this.form.amountInput.value=this.value" onchange="this.form.submit()"/>
-<input type="number" name="amountInput" min="1" max="7" value="{{chain_length}}" oninput="this.form.chain_length.value=this.value"  onchange="this.form.submit()"/>
+	<input id="chain_length" type="range" class="slider-width200"  name="chain_length" min="1" max="7" value="{{chain_length}}" onchange="outputUpdate(); this.form.submit()"/>
+<!--<output id="amountInput" type="number" name="amountInput" onload="outputUpdate({{chain_length}})"/>-->
+       <input id="Textbox" name="Textbox"/>
         <p>
 
 	<h2>Cost of payload</h2>
