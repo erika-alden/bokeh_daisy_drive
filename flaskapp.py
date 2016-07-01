@@ -43,6 +43,8 @@ alphas = {
     'y7':0.3,
 }
 
+convert_drive_init = [0.001,0.003,0.01,0.03,0.1,0.3]
+
 def find_nearest(array,value):
     idx = (np.abs(array-value)).argmin()
     return array[idx]
@@ -87,7 +89,8 @@ def polynomial():
             repeated_seeding = 0
 
         try:
-            drive_init = float(getitem(args, 'drive_init', .1))*1000
+            drive_init_raw = int(getitem(args, 'drive_init', .1))
+            drive_init = convert_drive_init[drive_init_raw] * 1000.0
         except:
             drive_init = 100
 
@@ -167,7 +170,7 @@ def polynomial():
         payload_cost = float(payload_cost)/100.0,
         repeated_seeding = repeated_seeding,
         r_val = r,
-        drive_init= float(drive_init)/1000.0
+        drive_init= drive_init_raw
     )
     return encode_utf8(html)
 
