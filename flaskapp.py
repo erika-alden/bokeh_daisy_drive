@@ -89,6 +89,11 @@ def polynomial():
             repeated_seeding = 0
 
         try:
+            homing = float(getitem(args, 'homing', 0.8))*10
+        except:
+            homing = 0
+
+        try:
             drive_init_raw = int(getitem(args, 'drive_init', .1))
             drive_init = convert_drive_init[drive_init_raw] * 1000.0
         except:
@@ -170,7 +175,8 @@ def polynomial():
         payload_cost = float(payload_cost)/100.0,
         repeated_seeding = repeated_seeding,
         r_val = r,
-        drive_init= drive_init_raw
+        drive_init = drive_init_raw,
+        homing =homing/10.0
     )
     return encode_utf8(html)
 
