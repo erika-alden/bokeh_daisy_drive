@@ -89,9 +89,9 @@ def polynomial():
             repeated_seeding = 0
 
         try:
-            homing = float(getitem(args, 'homing', 0.8))*10
+            homing = float(getitem(args, 'homing', 1))*10
         except:
-            homing = 0
+            homing = 10
 
         try:
             drive_init_raw = int(getitem(args, 'drive_init', .1))
@@ -100,18 +100,21 @@ def polynomial():
             drive_init = 100
 
         # fix bad inputs
-        avail_c = np.arange(1,7,1)
+        avail_c = np.arange(1,4,1)
         avail_p =  np.arange(2,41,3)
         avail_r =  np.array([0,1])
-        avail_d =  np.append(np.array([1]), np.arange(100,1001,50))
+        avail_d =  np.array([1,10,100])
+        avail_h = np.array([8,10])
 
         chain_length = find_nearest(avail_c, chain_length)
         payload_cost = find_nearest(avail_p, payload_cost)
         repeated_seeding = find_nearest(avail_r, repeated_seeding)
         drive_init = find_nearest(avail_d, drive_init)
+        homing_num = find_nearest(avail_h, homing)
         
-        filename = '/home/erikad/flaskapp/pickle/'+str(chain_length)+'_'+str(payload_cost)+'_'+str(repeated_seeding)+'_'+str(drive_init)+'.pickle'
-        return_str = return_str + filename
+        filename = '/home/erikad/flaskapp/pickle/'+str(chain_length)+'_'+str(payload_cost)+'_'+str(repeated_seeding)+'_'+str(drive_init)+'_'+str(homing_num)+'.pickle'
+
+        return_str = return_str + str(homing) + ' '+ filename
 
         if (os.path.isfile(filename)):
             with open(filename, 'rb') as handle:
