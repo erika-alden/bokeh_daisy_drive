@@ -27,7 +27,7 @@
     function outputUpdate(){
         var values = [0.001, 0.003, 0.01, 0.03, 0.1, 0.3];
         var slider_value = document.getElementsByName("drive_init")[0].value;
-        document.getElementsByName("b_release_size")[0].value = values[slider_value];
+        document.getElementsByName("b_release_size")[0].value = values[slider_value-1];
 
         var dropdown = document.getElementsByName("repeated_seeding")[0];
         vals = ["no", "yes"]

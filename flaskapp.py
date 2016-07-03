@@ -79,9 +79,9 @@ def polynomial():
             chain_length = 5
 
         try:
-            payload_cost = float(getitem(args, 'payload_cost', 0.35))*100
+            payload_cost = float(getitem(args, 'payload_cost', 0.14))*100
         except:
-            payload_cost = 35
+            payload_cost = 14
 
         try:
             repeated_seeding = on_off[getitem(args, 'repeated_seeding', 'no')]
@@ -100,10 +100,10 @@ def polynomial():
             drive_init = 100
 
         # fix bad inputs
-        avail_c = np.arange(1,4,1)
+        avail_c = np.arange(1,7,1)
         avail_p =  np.arange(2,41,3)
         avail_r =  np.array([0,1])
-        avail_d =  np.array([1,10,100])
+        avail_d =  np.array([1, 3, 10, 30, 100, 300])
         avail_h = np.array([8,10])
 
         chain_length = find_nearest(avail_c, chain_length)
