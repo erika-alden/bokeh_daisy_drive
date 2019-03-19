@@ -73,15 +73,15 @@ def polynomial():
 
         # Get all the form arguments in the url with defaults
         try:
-            chain_length = int(getitem(args, 'chain_length', 5))
+            chain_length = int(getitem(args, 'chain_length', 4))
         except:
             # "must be an integer" error message?
-            chain_length = 5
+            chain_length = 4
 
         try:
-            payload_cost = float(getitem(args, 'payload_cost', 0.14))*100
+            payload_cost = float(getitem(args, 'payload_cost', 0.11))*100
         except:
-            payload_cost = 14
+            payload_cost = 11
 
         try:
             repeated_seeding = on_off[getitem(args, 'repeated_seeding', 'no')]
@@ -94,7 +94,7 @@ def polynomial():
             homing = 10
 
         try:
-            drive_init_raw = int(getitem(args, 'drive_init', .1))
+            drive_init_raw = int(getitem(args, 'drive_init', 0))
             drive_init = convert_drive_init[drive_init_raw] * 1000.0
         except:
             drive_init = 100
@@ -104,13 +104,17 @@ def polynomial():
         avail_p =  np.arange(2,41,3)
         avail_r =  np.array([0,1])
         avail_d =  np.array([1, 3, 10, 30, 100, 300])
-        avail_h = np.array([8,10])
+        avail_h = np.array([8, 9, 10])
+
+        return_str = return_str + "<br>Original drive init " + str(drive_init) + "<br>"
 
         chain_length = find_nearest(avail_c, chain_length)
         payload_cost = find_nearest(avail_p, payload_cost)
         repeated_seeding = find_nearest(avail_r, repeated_seeding)
         drive_init = find_nearest(avail_d, drive_init)
         homing_num = find_nearest(avail_h, homing)
+        
+        return_str = return_str + "<br>New drive init " + str(drive_init) + "<br>"
         
         filename = '/home/erikad/flaskapp/pickle/'+str(chain_length)+'_'+str(payload_cost)+'_'+str(repeated_seeding)+'_'+str(drive_init)+'_'+str(homing_num)+'.pickle'
 
@@ -150,7 +154,6 @@ def polynomial():
 
     except Exception as e:
         return_str = return_str+ "<br>Exception " + e.__doc__ + e.message
-        return return_str
 
     # Configure resources to include BokehJS inline in the document.
     # For more details see:
